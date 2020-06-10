@@ -1,4 +1,4 @@
-name: CI
+name: ci-bin-builder
 on:
   push:
   pull_request:
@@ -20,7 +20,7 @@ jobs:
           sudo apt-get install -y gcc-multilib g++-multilib
         name: Install multilib GCC and G++
       - run: |
-          yarn && yarn test && yarn release -l
+          yarn && yarn test && yarn release -l --publish never
         name: Run build
   build-darwin:
     runs-on: macOS-latest
@@ -33,7 +33,7 @@ jobs:
           export ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder      
         name: Export variables
       - run: |
-          yarn && yarn test && yarn release -m
+          yarn && yarn test && yarn release -m --publish never
         name: Run build
   build-win64:
     runs-on: windows-latest
@@ -42,4 +42,4 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v1
       - run: |
-          yarn && yarn test && yarn release -w
+          yarn && yarn test && yarn release -w --publish never
