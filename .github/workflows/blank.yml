@@ -1,0 +1,45 @@
+name: CI
+on:
+  push:
+  pull_request:
+  release:
+
+jobs:
+  build-linux64-muitllib:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1
+      - run: |
+          export ELECTRON_CACHE=$HOME/.cache/electron
+          export ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder      
+        name: Export variables
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-multilib g++-multilib
+        name: Install multilib GCC and G++
+      - run: |
+          yarn && yarn test && yarn release -l
+        name: Run build
+  build-darwin:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1
+      - run: |
+          export ELECTRON_CACHE=$HOME/.cache/electron
+          export ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder      
+        name: Export variables
+      - run: |
+          yarn && yarn test && yarn release -m
+        name: Run build
+  build-win64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1
+      - run: |
+          yarn && yarn test && yarn release -w
