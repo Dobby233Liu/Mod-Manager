@@ -54,4 +54,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: DDMM-win64-dist
-          path: dist
+          # not sure
+          path: dist/ddmm-*-win.exe
