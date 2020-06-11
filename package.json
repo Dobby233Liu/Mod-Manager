@@ -79,7 +79,6 @@
         "owner": "DokiDokiModManager"
       }
     ],
-    // antibloat nsis settings
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
