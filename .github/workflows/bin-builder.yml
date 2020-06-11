@@ -3,9 +3,10 @@ on:
   push:
   pull_request:
   release:
+    types: [published]
 
 jobs:
-  build-linux64-multilib:
+  build-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,9 +25,17 @@ jobs:
         name: Run build
       - uses: actions/upload-artifact@v2
         with:
-          name: DDMM-linux64-dist-AppImage
+          name: DDMM-linux
           path: dist/*.AppImage
-  build-darwin:
+      - name: Upload files to release
+        uses: skx/github-action-publish-binaries@master
+        if: github.event.release # Runs ONLY when it's a published release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # We use the outputs here to tell it where exactly the file is.
+          args: dist/*.AppImage
+  build-mac:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
@@ -41,9 +50,17 @@ jobs:
         name: Run build
       - uses: actions/upload-artifact@v2
         with:
-          name: DDMM-darwin-dist-dmg
+          name: DDMM-mac
           path: dist/*.dmg
-  build-win64:
+      - name: Upload files to release
+        uses: skx/github-action-publish-binaries@master
+        if: github.event.release # Runs ONLY when it's a published release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # We use the outputs here to tell it where exactly the file is.
+          args: dist/*.dmg
+  build-win:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -53,6 +70,14 @@ jobs:
           yarn && yarn test && yarn release -w --publish never
       - uses: actions/upload-artifact@v2
         with:
-          name: DDMM-win64-dist
+          name: DDMM-win
           # not sure
-          path: dist/ddmm-*-win.exe
+          path: dist/ddmm-*.exe
+      - name: Upload files to release
+        uses: skx/github-action-publish-binaries@master
+        if: github.event.release # Runs ONLY when it's a published release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # We use the outputs here to tell it where exactly the file is.
+          args: dist/ddmm-*.exe
