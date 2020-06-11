@@ -79,6 +79,14 @@
         "owner": "DokiDokiModManager"
       }
     ],
+    // antibloat nsis settings
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "preCompressedFileExtensions": [],
+      "displayLanguageSelector": true,
+      "runAfterFinish": false
+    },
     "win": {
       "target": [
         {
